@@ -1,0 +1,2 @@
+build/
+!build/src/Debug/glfw3.lib
