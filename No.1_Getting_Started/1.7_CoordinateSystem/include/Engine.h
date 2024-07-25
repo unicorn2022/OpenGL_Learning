@@ -7,10 +7,10 @@
 #include "Engine/Manager/INCLUDE_ALL.h"
 #include "Engine/Object/INCLUDE_ALL.h"
 
+static const char* SCR_NAME = "LearnOpenGL";
 static const int SCR_WIDTH = 800;
 static const int SCR_HEIGHT = 800;
-static const char* SCR_NAME = "LearnOpenGL";
-
+static const glm::vec4 SCR_BACKGROUND = glm::vec4(0.2f, 0.3f, 0.3f, 1.0f);
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
     glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
@@ -61,12 +61,6 @@ public:
         /* 设置视口大小, 注册回调函数 */
         glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
         glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-        /* 创建物体, 着色器程序 */
-        shader_manager = new ShaderManager();
-        texture_manager = new TextureManager();
-        object_manager = new ObjectManager(shader_manager, texture_manager);
-        camera = new CameraPerspective((float)SCR_WIDTH / (float)SCR_HEIGHT);
     }
 
     ~Engine() {
@@ -76,17 +70,29 @@ public:
 
 public:
     void Run() {
-        /* 渲染循环 */
+        /* 1. 创建 manager */
+        shader_manager = new ShaderManager();
+        texture_manager = new TextureManager();
+        object_manager = new ObjectManager(shader_manager, texture_manager);
+        camera_manager = new CameraManager(SCR_WIDTH, SCR_HEIGHT);
+
+        /* 2. 启动深度测试 */
+        glEnable(GL_DEPTH_TEST);
+
+        /* 3. 渲染循环 */
         while (!glfwWindowShouldClose(window)) {
-            /* 处理输入 */ 
+            /* 3.1 处理输入 */ 
             processInput(window);
-            /* 渲染指令 */ 
+            object_manager->GameTick();
+            
+            /* 3.2 渲染指令 */ 
             // 清屏
-            glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-            glClear(GL_COLOR_BUFFER_BIT);
+            glClearColor(SCR_BACKGROUND.x, SCR_BACKGROUND.y, SCR_BACKGROUND.z, SCR_BACKGROUND.w);
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
             // 绘制物体
-            object_manager->DrawAll(camera);
-            /* 检查并调用事件, 交换缓存 */
+            object_manager->RenderTick(camera_manager);
+            
+            /* 3.3 检查并调用事件, 交换缓存 */
             glfwPollEvents();
             glfwSwapBuffers(window);
         }
@@ -99,5 +105,5 @@ private:
     ShaderManager* shader_manager;
     ObjectManager* object_manager;
     TextureManager* texture_manager;
-    Camera* camera;
+    CameraManager* camera_manager;
 };

@@ -17,20 +17,18 @@ public:
 public:
     /* 游戏逻辑 */
     virtual void GameTick() {}
-    /* 渲染逻辑 */
+    /* 渲染逻辑(基类): 绑定着色器、纹理、模型变换矩阵 */
     virtual void RenderTick(Camera* camera) {
         if (shader == NULL) return;
 
-        /* 绑定着色器、纹理 */
+        /* 绑定着色器、纹理、模型变换矩阵 */
         shader->Use();
         for (int i = 0; i < textures.size(); i++)
             textures[i]->Use(i);
-        
-        /* 变换矩阵 */
         shader->SetUniform("model_transform", model_transform_translate * model_transform_rotate * model_transform_scale);
     }
 
-protected:
+public:
     /** 平移物体
      * \param direction 平移向量
      */
