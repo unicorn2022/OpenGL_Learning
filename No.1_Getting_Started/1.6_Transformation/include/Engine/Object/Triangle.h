@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Engine/Basic/Object.h"
-#include <vector>
 
 class Triangle : public Object {
 public:
@@ -33,9 +32,9 @@ public:
 
 public:
     virtual void RenderTick() {
-        /* 绑定着色器、纹理 */
-        if (shader != NULL) shader->Use(); 
-
+        this->Object::RenderTick();
+        if (shader == NULL) return;
+        
         /* 绘制 */
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 3);

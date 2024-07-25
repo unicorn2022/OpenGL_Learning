@@ -1,5 +1,4 @@
 #pragma once
-#include <vector>
 #include "ShaderManager.h"
 #include "TextureManager.h"
 #include "Engine/Object/Square.h"

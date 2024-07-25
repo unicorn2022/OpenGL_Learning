@@ -1,6 +1,4 @@
 #pragma once
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
 #include "Engine/Basic/Utils.h"
 
 class Shader {
@@ -61,7 +59,14 @@ public:
     void SetUniform(const std::string& name, float value_1, float value_2, float value_3, float value_4) const {
         glUniform4f(glGetUniformLocation(ID, name.c_str()), value_1, value_2, value_3, value_4);
     }
-
+    /* 设置 uniform 变量值: float4 */
+    void SetUniform(const std::string& name, glm::vec4 vec) const {
+        glUniform4f(glGetUniformLocation(ID, name.c_str()), vec.x, vec.y, vec.z, vec.w);
+    }
+    /* 设置 uniform 变量值: mat4 */
+    void SetUniform(const std::string& name, glm::mat4& mat) const {
+        glUniformMatrix4fv(glGetUniformLocation(ID, name.c_str()), 1, GL_FALSE, glm::value_ptr(mat));
+    }
 
 private:
     /* 判断 shader 编译是否成功 */

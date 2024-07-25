@@ -1,5 +1,4 @@
 #pragma once
-#include <glad/glad.h>
 #include "Engine/Basic/Utils.h"
 
 class Texture {

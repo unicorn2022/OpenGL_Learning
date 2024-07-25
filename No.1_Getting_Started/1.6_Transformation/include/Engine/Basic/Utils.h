@@ -1,10 +1,20 @@
 #pragma once
-#include <string>
+/* 标准库 */
 #include <fstream>
 #include <sstream>
 #include <iostream>
 #include <map>
+#include <string>
+#include <vector>
 
+/* OpenGL 库 */
+#include <GLFW/glfw3.h>
+#include <glad/glad.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
+/* 图片加载 */
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 

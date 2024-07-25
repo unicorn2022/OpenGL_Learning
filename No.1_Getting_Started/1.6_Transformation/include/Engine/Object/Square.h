@@ -57,21 +57,20 @@ public:
     }
 
 public:
+    virtual void GameTick() {
+        if (shader == NULL) return;
+        TransformTranslate(glm::vec3(0.001f, 0, 0.0));
+        TransformRotate(glm::vec3(0, 0, 1), 1.0f);
+    }
+
     virtual void RenderTick() {
-        /* 绑定着色器、纹理 */
-        if (shader != NULL) shader->Use();
-        for (int i = 0; i < textures.size(); i++)
-            textures[i]->Use(i);
+        this->Object::RenderTick();
+        if (shader == NULL) return;
         
         /* 纹理对应关系 */
         shader->SetUniform("wall_texture", 0);
         shader->SetUniform("face_texture", 1);
         shader->SetUniform("mix_rate", GlobalValue::GetInstance().GetValue("mix_rate"));
-
-        /* 颜色变化 */
-        float time = glfwGetTime();
-        float green = (sin(time) / 2.0f) + 0.5f;
-        shader->SetUniform("ourColor", 0.0f, green, 0.0f, 1.0f);
 
         /* 绘制 */
         glBindVertexArray(VAO);
