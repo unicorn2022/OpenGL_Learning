@@ -22,10 +22,16 @@ public:
         /* 相机参数 */
         camera->Use(shader, "view_transform", "projection_transform");
 
-        /* 纹理对应关系 */
-        shader->SetUniform("wall_texture", 0);
-        shader->SetUniform("face_texture", 1);
-        shader->SetUniform("mix_rate", GlobalValue::GetInstance().GetValue("mix_rate"));
+        /* Shader变量 */
+        glm::vec3 color;
+        color.x = GlobalValue::GetInstance().GetValue("light_color.x");
+        color.y = GlobalValue::GetInstance().GetValue("light_color.y");
+        color.z = GlobalValue::GetInstance().GetValue("light_color.z");
+        shader->SetUniform("light_color", color);
+        color.x = GlobalValue::GetInstance().GetValue("object_color.x");
+        color.y = GlobalValue::GetInstance().GetValue("object_color.y");
+        color.z = GlobalValue::GetInstance().GetValue("object_color.z");
+        shader->SetUniform("object_color", color);
 
         /* 绘制 */
         glBindVertexArray(VAO);

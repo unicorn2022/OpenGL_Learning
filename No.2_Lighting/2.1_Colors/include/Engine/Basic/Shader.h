@@ -67,6 +67,10 @@ public:
     void SetUniform(const std::string& name, float value) const {
         glUniform1f(glGetUniformLocation(ID, name.c_str()), value);
     }
+    /* 设置 uniform 变量值: vec3 */
+    void SetUniform(const std::string& name, glm::vec3 vec) const {
+        glUniform3f(glGetUniformLocation(ID, name.c_str()), vec.x, vec.y, vec.z);
+    }
     /* 设置 uniform 变量值: float4 */
     void SetUniform(const std::string& name, float value_1, float value_2, float value_3, float value_4) const {
         glUniform4f(glGetUniformLocation(ID, name.c_str()), value_1, value_2, value_3, value_4);
