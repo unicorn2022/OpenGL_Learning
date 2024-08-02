@@ -1,7 +1,7 @@
 #pragma once
 #include "TextureManager.h"
 #include "ShaderManager.h"
-#include "Engine/Basic/Material.h"
+#include "Engine/Material/INCLUDE_ALL.h"
 
 class MaterialManager {
 public:

@@ -21,7 +21,7 @@ public:
         // TransformRotate(glm::vec3(0, 0, 1), 1.0f);
     }
 
-    virtual void RenderTick(Camera* camera, Light* point_light = NULL) {
+    virtual void RenderTick(Camera* camera) {
         this->Object::RenderTick(camera);
         if (material == NULL) return;
         

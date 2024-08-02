@@ -15,8 +15,8 @@ public:
     }
 
 public:
-    virtual void RenderTick(Camera* camera, Light* point_light = NULL) {
-        this->Object::RenderTick(camera, point_light);
+    virtual void RenderTick(Camera* camera) {
+        this->Object::RenderTick(camera);
         if (material == NULL) return;
         
         /* 相机参数 */

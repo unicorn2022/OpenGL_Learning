@@ -16,12 +16,11 @@ public:
     /* 游戏逻辑 */
     virtual void GameTick() {}
     /* 渲染逻辑(基类): 绑定着色器、纹理、模型变换矩阵 */
-    virtual void RenderTick(Camera* camera, Light* point_light = NULL) {
+    virtual void RenderTick(Camera* camera) {
         if (material == NULL) return;
         material->Use();
 
-        /* 绑定着色器、纹理、灯光、模型变换矩阵 */
-        if (point_light != NULL) point_light->Use(material->shader);
+        /* 绑定模型变换矩阵 */
         material->shader->SetUniform("model_transform", model_transform_translate * model_transform_rotate * model_transform_scale);
     }
 
@@ -48,7 +47,7 @@ public:
         model_transform_scale = glm::scale(model_transform_scale, rate);
     }
 
-protected:
+public:
     /* 顶点数组 VAO */
     unsigned int VAO;
     /* 顶点数据 VBO */

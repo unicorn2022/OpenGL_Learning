@@ -5,7 +5,9 @@
 
 #include "Engine/Basic/INCLUDE_ALL.h"
 #include "Engine/Object/INCLUDE_ALL.h"
-#include "Engine/Manager/INCLUDE_ALL.h"`
+#include "Engine/Manager/INCLUDE_ALL.h"
+#include "Engine/Material/INCLUDE_ALL.h"
+#include "Engine/Light/INCLUDE_ALL.h"
 
 static const char* SCR_NAME = "LearnOpenGL";
 static const int SCR_WIDTH = 800;
