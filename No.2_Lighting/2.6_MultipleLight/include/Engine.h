@@ -111,6 +111,20 @@ private:
 
         /* 设置鼠标捕捉 */
         glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    
+        /* 检查扩展是否支持 */
+        const std::string extension_name[1] = {"GL_ARB_shading_language_include" };
+        GLint n;
+        glGetIntegerv(GL_NUM_EXTENSIONS, &n);
+        std::cout << "支持的扩展总数: " << n << "\n";
+        for(int i = 0; i < n; i++){
+            std::string extension = (char*)glGetStringi(GL_EXTENSIONS, i);
+            for (auto name : extension_name) {
+                if (extension == name) {
+                    std::cout << "支持扩展: " << name << std::endl;
+                }
+            }
+        }
     }
 
 public:

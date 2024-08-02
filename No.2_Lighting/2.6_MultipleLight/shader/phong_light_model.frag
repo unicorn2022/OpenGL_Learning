@@ -7,7 +7,6 @@ struct PhongMaterial {
     sampler2D specular;
     float shininess;
 };
-
 /* 定向光源 */
 struct DirectLight {
     // 光源颜色
@@ -17,6 +16,71 @@ struct DirectLight {
     // 光源属性
     vec3 direction;
 };
+/* 点光源 */
+struct PointLight {
+    // 光源颜色
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    // 光源属性
+    vec3 position;
+    // 衰减
+    float constant;
+    float linear;
+    float quadratic;
+};
+/* 聚光源 */
+struct SpotLight {
+    // 光源颜色
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+    // 光源属性
+    vec3 position;
+    vec3 direction;
+    float inner_cut_off;
+    float outer_cut_off;
+    // 衰减
+    float constant;
+    float linear;
+    float quadratic;
+};
+
+/* 光源计算函数 */
+vec3 CalcDirectLight(DirectLight light, vec3 normal_dir, vec3 view_dir);
+vec3 CalcPointLight(PointLight light, vec3 normal_dir, vec3 frag_position, vec3 view_dir);
+vec3 CalcSpotLight(SpotLight light, vec3 normal_dir, vec3 frag_position, vec3 view_dir);
+
+/* 输入输出变量 */
+out vec4 FragColor;
+in vec3 Position;
+in vec3 Normal;
+in vec2 TexCoord;
+
+/* uniform 变量 */
+// 观察方向
+uniform vec3 view_position;
+// 光源
+uniform DirectLight direct_light;
+#define MAX_POINT_LIGHT_COUNT 4
+uniform PointLight point_lights[MAX_POINT_LIGHT_COUNT];
+uniform SpotLight spot_light;
+// 材质
+uniform PhongMaterial material;
+
+void main() {
+    vec3 normal_dir = normalize(Normal);
+    vec3 view_dir = normalize(view_position - Position);
+
+    // 计算三种光照
+    vec3 color = CalcDirectLight(direct_light, normal_dir, view_dir);
+    for(int i = 0; i < MAX_POINT_LIGHT_COUNT; i++)
+        color += CalcPointLight(point_lights[i], normal_dir, Position, view_dir);
+    color += CalcSpotLight(spot_light, normal_dir, Position, view_dir);
+    
+    FragColor = vec4(color, 1.0);
+}
+
 vec3 CalcDirectLight(DirectLight light, vec3 normal_dir, vec3 view_dir) {
     // 1. 环境光
     vec3 ambient = light.ambient * texture(material.diffuse, TexCoord).rgb;
@@ -34,19 +98,6 @@ vec3 CalcDirectLight(DirectLight light, vec3 normal_dir, vec3 view_dir) {
     return color;
 }
 
-/* 点光源 */
-struct PointLight {
-    // 光源颜色
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    // 光源属性
-    vec3 position;
-    // 衰减
-    float constant;
-    float linear;
-    float quadratic;
-};
 vec3 CalcPointLight(PointLight light, vec3 normal_dir, vec3 frag_position, vec3 view_dir) {
     // 1. 环境光
     vec3 ambient = light.ambient * texture(material.diffuse, TexCoord).rgb;
@@ -68,22 +119,6 @@ vec3 CalcPointLight(PointLight light, vec3 normal_dir, vec3 frag_position, vec3 
     return color * attenuation;
 }
 
-/* 聚光源 */
-struct SpotLight {
-    // 光源颜色
-    vec3 ambient;
-    vec3 diffuse;
-    vec3 specular;
-    // 光源属性
-    vec3 position;
-    vec3 direction;
-    float inner_cut_off;
-    float outer_cut_off;
-    // 衰减
-    float constant;
-    float linear;
-    float quadratic;
-};
 vec3 CalcSpotLight(SpotLight light, vec3 normal_dir, vec3 frag_position, vec3 view_dir) {
     // 1. 环境光
     vec3 ambient = light.ambient * texture(material.diffuse, TexCoord).rgb;
@@ -108,34 +143,4 @@ vec3 CalcSpotLight(SpotLight light, vec3 normal_dir, vec3 frag_position, vec3 vi
     // 最终颜色
     vec3 color = ambient + diffuse + specular;
     return color * attenuation * instensity;
-}
-
-/* 输入输出变量 */
-out vec4 FragColor;
-in vec3 Position;
-in vec3 Normal;
-in vec2 TexCoord;
-
-/* uniform 变量 */
-// 观察方向
-uniform vec3 view_position;
-// 光源
-#define MAX_POINT_LIGHT_COUNT 4
-uniform DirectLight direct_light;
-uniform PointLight point_lights[MAX_POINT_LIGHT_COUNT];
-uniform SpotLight spot_light;
-// 材质
-uniform PhongMaterial material;
-
-void main() {
-    vec3 normal_dir = normalize(Normal);
-    vec3 view_dir = normalize(view_position - Position);
-
-    // 计算三种光照
-    vec3 color = CalcDirectLight(direct_light, normal_dir, view_dir);
-    for(int i = 0; i < MAX_POINT_LIGHT_COUNT; i++)
-        color += CalcPointLight(point_lights[i], normal_dir, Position, view_dir);
-    color += CalcSpotLight(spot_light, normal_dir, Position, view_dir);
-    
-    FragColor = vec4(color, 1.0);
 }
