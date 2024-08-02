@@ -1,9 +1,11 @@
 cmake_minimum_required(VERSION 3.23)
 # 项目名称
 project(MultipleLight)
+
 # C++标准
 set(CMAKE_CXX_STANDARD 11)
 
+# 忽略 warning
 if(WIN32)
     add_compile_options(/wd4819)
 endif()
@@ -20,11 +22,12 @@ include_directories(
 # 库文件路径
 link_directories(
     ${OpenGL_Root_Path}/glfw-3.4/lib
+    ${OpenGL_Root_Path}/glfw-3.4/lib/Release/x64
 )
 # 可执行文件
-add_executable(MultipleLight 
+add_executable(${PROJECT_NAME} 
     ${OpenGL_Root_Path}/glad/src/glad.c
     ${PROJECT_SOURCE_DIR}/src/main.cpp
 )
 # 库文件名称
-target_link_libraries(MultipleLight glfw3)
+target_link_libraries(${PROJECT_NAME} glfw3)
