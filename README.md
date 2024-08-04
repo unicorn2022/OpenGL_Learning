@@ -36,3 +36,8 @@
 chcp 650001
 ```
 
+# 对ASSIMP库的配置
+
+## dll动态连接文件
+
+将`assimp-vc143-mtd.dll`拷贝到`C:\Windows\System32`和`C:\Windows\SysWOW64`中
