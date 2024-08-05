@@ -35,9 +35,13 @@ private:
 
 public:
     void Run() {
-        /* 1. 设置背景颜色 */
-        glClearColor(COLOR_BACKGROUND.x, COLOR_BACKGROUND.y, COLOR_BACKGROUND.z, COLOR_BACKGROUND.w);
-
+        /* 1. 启动深度测试、模板测试 */
+        glEnable(GL_DEPTH_TEST);
+        glDepthFunc(GL_LESS);
+        glEnable(GL_STENCIL_TEST);
+        glStencilFunc(GL_NOTEQUAL, 1, 0xff);
+        glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); // 通过模板&深度测试时, 将模板值设置为 glStencilFunc 指定的 ref 值
+            
         /* 2. 渲染循环 */
         while (!glfwWindowShouldClose(window)) {
             /* 2.0 预处理 */
@@ -50,21 +54,21 @@ public:
             ObjectManager::GetInstance().GameTick();
             
             /* 2.2 渲染指令 */ 
-            // 2.2.1 启用深度测试, 模板检测
-            glEnable(GL_DEPTH_TEST);
-            glEnable(GL_STENCIL_TEST);
-            glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE); // 通过模板&深度测试时, 将模板值设置为 glStencilFunc 指定的 ref 值
-            // 2.2.2 清屏: 颜色缓冲, 深度缓冲, 模板缓冲
+            // 2.2.1 清屏: 颜色缓冲, 深度缓冲, 模板缓冲
+            glClearColor(COLOR_BACKGROUND.x, COLOR_BACKGROUND.y, COLOR_BACKGROUND.z, COLOR_BACKGROUND.w);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-            // 2.2.3 绘制物体(1): 更新模板缓冲
+            // 2.2.2 绘制物体(1): 更新模板缓冲
             glStencilFunc(GL_ALWAYS, 1, 0xff); 
             glStencilMask(0xff); // 更新模板值
             ObjectManager::GetInstance().RenderTick();
-            // 2.2.4 绘制物体(2): 根据模板缓冲绘制边界
+            // 2.2.3 绘制物体(2): 根据模板缓冲绘制边界
             glStencilFunc(GL_NOTEQUAL, 1, 0xff); // frag对应的模板值不为1时, 通过测试
             glStencilMask(0x00);        // 禁止更新模板值
             glDisable(GL_DEPTH_TEST);   // 禁止深度检测
             ObjectManager::GetInstance().RenderTick(MaterialManager::GetInstance().border_material);
+            glStencilMask(0xff);
+            glStencilFunc(GL_ALWAYS, 0, 0xff);
+            glEnable(GL_DEPTH_TEST);
             
             /* 2.3 检查并调用事件, 交换缓存 */
             glfwPollEvents();
