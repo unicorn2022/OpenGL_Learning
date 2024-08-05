@@ -4,9 +4,19 @@
 
 学习OpenGL，教程地址：https://learnopengl-cn.github.io/
 
-# 对VSCode的配置
+# 一、知识点
 
-## 设置编译工具&构建工具
+## 1.1	OpenGL渲染测试的顺序
+
+提前深度测试 => 片段着色器 => 模板测试 => 深度测试
+
+- 使用提前深度测试时，片段着色器就不能写入片段的深度值
+
+# 二、环境配置
+
+## 2.1	对VSCode的配置
+
+### 2.1.1	设置编译工具&构建工具
 
 > ctrl + shift + p > cmake: scan for kits
 
@@ -16,19 +26,19 @@
 
 - 设置工具包为：**VS x86_amd64**
 
-## 解决输出乱码问题
+### 2.1.2	解决输出乱码问题
 
 > ctrl + , > cmake: output log encoding
 
 - 设置输出日志编码为：**utf-8**
 
-## 解决代码补全问题
+### 2.1.3	解决代码补全问题
 
 - 安装**C/C++**扩展
 - 设置扩展的编译器路径为：**D:\Program\VS\Community\VC\Tools\MSVC\14.40.33807\bin\Hostx64\x64\cl.exe**
 - 设置扩展的包含路径为：**E:\MyProject\GameEngine\OpenGL_Learning\3rd-party\\\*\***
 
-## 解决终端乱码问题
+### 2.1.4	解决终端乱码问题
 
 - 在vscode的终端中，将编码临时修改为utf-8
 
@@ -36,8 +46,8 @@
 chcp 650001
 ```
 
-# 对ASSIMP库的配置
+## 2.2	对ASSIMP库的配置
 
-## dll动态连接文件
+### 2.2.1	dll动态连接文件
 
 将`assimp-vc143-mtd.dll`拷贝到`C:\Windows\System32`和`C:\Windows\SysWOW64`中
