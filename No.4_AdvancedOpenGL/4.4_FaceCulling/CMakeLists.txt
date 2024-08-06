@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
 # 项目名称
-project(Blending)
+project(FaceCulling)
 
 # C++标准
 set(CMAKE_CXX_STANDARD 11)
