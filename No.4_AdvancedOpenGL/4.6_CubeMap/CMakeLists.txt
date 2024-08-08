@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.23)
 # 项目名称
-project(CubeMap)
+project(UnicornRenderEngine)
 
 # C++标准
 set(CMAKE_CXX_STANDARD 11)
@@ -18,7 +18,7 @@ include_directories(
     ${OpenGL_Root_Path}/glfw-3.4/include
     ${OpenGL_Root_Path}/glad/include
     ${OpenGL_Root_Path}/assimp-5.4.2/include
-    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/URE
 )
 # 库文件路径
 link_directories(
@@ -28,7 +28,7 @@ link_directories(
 # 可执行文件
 add_executable(${PROJECT_NAME} 
     ${OpenGL_Root_Path}/glad/src/glad.c
-    ${PROJECT_SOURCE_DIR}/src/main.cpp
+    ${PROJECT_SOURCE_DIR}/main.cpp
 )
 # 库文件
 target_link_libraries(${PROJECT_NAME} glfw3 assimp-vc143-mtd)
